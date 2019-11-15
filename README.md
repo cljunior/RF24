@@ -1,6 +1,22 @@
 
 # Arduino & Raspberry Pi driver for nRF24L01(+) 2.4GHz Wireless Transceiver
 
+## Compiling for Raspberry Pi to test in the STAGIOP-TR project
+
+	cd /RF24/RPi/RF24/
+	
+	sudo make install
+	
+	cd examples/
+	
+	sudo make install
+
+## Execute test
+
+	sudo ./gettingstarted
+	
+
+
 # *** I no longer maintain this fork, pls use the latest fork from TMRh20 https://github.com/TMRh20/RF24
 
 Design Goals: 
