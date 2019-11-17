@@ -7,6 +7,12 @@
 #include <cstdlib>
 #include <RF24/RF24.h>
 
+typedef struct {
+	unsigned long time;
+	float fVar1;
+	char cVar1;
+} myBuffer;
+
 using namespace std;
 
 // CE Pin, CSN Pin, SPI Speed
@@ -16,14 +22,11 @@ RF24 radio(RPI_V2_GPIO_P1_22, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_1MHZ);
 
 // Radio pipe addresses for the 2 nodes to communicate.
 const uint8_t pipes[][6] = {"1Node","2Node"};
-
+myBuffer buffer;
 
 int main(int argc, char** argv){
 
-	unsigned long got_time = 0;
-
-	// Print preamble:
-	printf("RF24/examples/send_struct/\n");
+	//unsigned long got_time = 0;
 
 	// Setup and configure rf radio
 	radio.begin();
@@ -40,22 +43,14 @@ int main(int argc, char** argv){
 	 
 	while (1) 
 	{
-		// Take the time, and receive it.
-		//printf("Now receiving...\n");
-	
 		// if there is data ready
-		//printf("Check available...\n");
-
 		if ( radio.available() )
 		{
-			// Dump the payloads until we've gotten everything
-
 			// Fetch the payload, and see if this was the last one.
-			radio.read( &got_time, sizeof(unsigned long) );
-
-			printf("got_time: %ul", got_time);
+			radio.read( &buffer, sizeof(buffer) );
+			printf("\n[INFO] Data received -> time: %ul, fVar1: %3.2f, cVar1: %c", buffer.time, buffer.fVar1, buffer.cVar1);
 		}
+		sleep(1);
 	}
-
 }
 
