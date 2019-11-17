@@ -19,7 +19,7 @@ CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
 
 # define all programs
 #PROGRAMS = scanner pingtest gettingstarted
-PROGRAMS = gettingstarted gettingstarted_call_response transfer pingpair_dyn
+PROGRAMS = gettingstarted gettingstarted_call_response transfer pingpair_dyn send_struct receive_struct
 SOURCES = ${PROGRAMS:=.cpp}
 
 all: ${PROGRAMS}
