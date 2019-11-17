@@ -7,6 +7,12 @@
 #include <cstdlib>
 #include <RF24/RF24.h>
 
+typedef struct {
+	unsigned long time;
+	float fVar1;
+	char cVar1;
+} myBuffer; 
+
 using namespace std;
 
 // CE Pin, CSN Pin, SPI Speed
@@ -16,11 +22,14 @@ RF24 radio(RPI_V2_GPIO_P1_22, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_1MHZ);
 
 // Radio pipe addresses for the 2 nodes to communicate.
 const uint8_t pipes[][6] = {"1Node","2Node"};
-
+myBuffer buffer;
 
 int main(int argc, char** argv){
 
-	unsigned long time = millis();
+	//unsigned long time = millis();
+	buffer.time = millis();
+	buffer.fVar1 = 7.33;
+	buffer.cVar1 = 'a';
 
 	// Print preamble:
 	printf("RF24/examples/send_struct/\n");
@@ -40,19 +49,23 @@ int main(int argc, char** argv){
 	 
 	while (1) 
 	{
-		// Take the time, and send it.  This will block until complete
-		// printf("Now sending...\n");
+		buffer.time += 1;
+		buffer.fVar1 += 1.7;
+		buffer.cVar1 = (++buffer.cVar1 < 127) ? buffer.cVar1 : 48;
 
-		time += 1;
-		bool ok = radio.write( &time, sizeof(unsigned long) );
+		bool ok = radio.write( &buffer, sizeof(buffer) );
 
-		if (!ok) 
+		if (ok) 
 		{
-			printf("failed.\n");
+			printf("\n[INFO] Sent OK");
+		}
+		else
+		{
+			printf("\n[FAIL] Sent failed!");
 		}
 
-		// Wait a second
-		sleep(1);
+		// Wait 
+		sleep(3);
 	}
 }
 
